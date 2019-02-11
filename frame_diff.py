@@ -51,5 +51,8 @@ if __name__ == '__main__':
         if key == 27:
             break
 
+    # Release the video capture object
+    cap.release()
+
     # Close all the windows
     cv2.destroyAllWindows()

@@ -18,6 +18,16 @@ if __name__ == '__main__':
     # Define the video capture object
     cap = cv2.VideoCapture(0)
 
+    # Define the background subtractor object
+    bg_subtractor = cv2.createBackgroundSubtractorMOG2()
+
+    # ---------------------------------------------------------------- #
+    # history shows the number of previous frames that the model uses  #
+    # to learn.                                                        #
+    # ---------------------------------------------------------------- #
+    history = 100
+    learning_rate = 1.0/history
+
     # Define the scaling factor
     scaling_factor = 0.5
 
@@ -26,27 +36,17 @@ if __name__ == '__main__':
         # Grabbing the current frame
         frame = get_frame(cap, scaling_factor)
 
-        # Convert the image to HSV colorspace
-        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        # Compute the mask
+        mask = bg_subtractor.apply(frame, learning_rate)
 
-        # Define range of skin color in hsv
-        lower = np.array([0, 70, 60])
-        upper = np.array([50, 150, 255])
-
-        # Threshold the hsv image to get only skin color
-        mask = cv2.inRange(hsv, lower, upper)
-
-        # Bitwise-AND between the mask and the original image
-        img_masked = cv2.bitwise_and(frame, frame, mask=mask)
-
-        # Run median blurring
-        img_blurred = cv2.medianBlur(img_masked, 5)
+        # Convert grayscale image to RGB color image
+        mask = cv2.cvtColor(mask, cv2.COLOR_GRAY2BGR)
 
         cv2.imshow('Input', frame)
-        cv2.imshow('Output', img_blurred)
+        cv2.imshow('Output', mask & frame)
 
         # Check if the user wants to end
-        key = cv2.waitKey(10)
+        key = cv2.waitKey(5)
         if key == 27:
             break
 
