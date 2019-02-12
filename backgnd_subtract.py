@@ -3,15 +3,15 @@ import numpy as np
 
 
 # Define a function to get the current frame from the webcam
-def get_frame(cap, scaling_factor):
+def get_frame(cp, sc_f):
     # Read the current frame from the video capture object
-    _, frame = cap.read()
+    _, frm = cp.read()
 
     # Resize the image
-    frame = cv2.resize(frame, None, fx=scaling_factor, fy=scaling_factor,
-                       interpolation=cv2.INTER_AREA)
+    frm = cv2.resize(frm, None, fx=sc_f, fy=sc_f,
+                     interpolation=cv2.INTER_AREA)
 
-    return frame
+    return frm
 
 
 if __name__ == '__main__':
