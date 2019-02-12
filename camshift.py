@@ -159,7 +159,7 @@ class ObjectTracker:
             if key == 27:
                 break
 
-            # Release the video capture object
+        # Release the video capture object
         self.cap.release()
 
         # Close all the windows
